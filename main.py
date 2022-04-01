@@ -18,17 +18,17 @@ def doprompt(text,prompt):
     prompt = prompt + "\nHuman: " + text + "\nAI"
     return prompt
 
-def wattson(text):
-  start_sequence = "\nAI:"
-  restart_sequence = "\nHuman: "
+def wattson():
+    global prom
+    start_sequence = "\nAI:"
+    restart_sequence = "\nHuman: "
 
-
-  response = openai.Completion.create(
-  engine="text-davinci-002",
-  temperature=0.9,
-  max_tokens=150,
-  prompt=prom,
-  top_p=1,
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        temperature=0.9,
+        max_tokens=150,
+        prompt=prom,
+        top_p=1,
   frequency_penalty=0,
   presence_penalty=0.6,
   stop=[" Human:", " AI:"]
@@ -75,20 +75,35 @@ def run():
             engine.stop()
             break
 
-        output = wattson(text)[2:]
-        prom=prom+output
+        output = wattson()[2:]
+        prom = prom + output
         print(output)
         engine.say(output)
         engine.runAndWait()
 
 def alternative():
     while True:
-        text=listen()
+        text = listen()
+        global prom
         prom = doprompt(text, prom)
-        tts=gTTS(text=text,lang=lang,slow=False)
+
+        if text == "exit":
+            output = wattson()[2:]
+            tts = gTTS(text=output, lang=lang, slow=False)
+            print(output)
+            tts.save('test.mp3')
+            time.sleep(0.6)
+            playsound('test.mp3', True)
+            os.remove("test.mp3")
+            break
+
+        output = wattson()[2:]
+        tts = gTTS(text=output, lang=lang, slow=False)
+        print(output)
         tts.save('test.mp3')
+        prom = prom + output
         time.sleep(0.6)
-        playsound('test.mp3',True)
+        playsound('test.mp3', True)
         os.remove("test.mp3")
 
 alternative()
