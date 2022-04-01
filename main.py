@@ -74,24 +74,25 @@ def listen():
         print("Sorry could not recognize your voice")
 
 
+def run():
+    while True:
 
-while True:
+        text = listen()
+        prom=doprompt(text,prom)
+        if text=="exit":
+            output = wattson(text)[2:]
+            print(output)
+            engine.say(output)
+            engine.runAndWait()
+            engine.stop()
+            break
 
-    text = listen()
-    prom=doprompt(text,prom)
-    if text=="exit":
         output = wattson(text)[2:]
-        prom = prom + output
+        prom=prom+output
         print(output)
         engine.say(output)
-        engine.stop()
-        break
-
-    output = wattson(text)[2:]
-    prom=prom+output
-    print(output)
-    engine.say(output)
-    engine.runAndWait()
+        engine.runAndWait()
 
 
+alternative()
 
