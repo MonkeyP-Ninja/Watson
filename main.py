@@ -48,18 +48,6 @@ engine.setProperty('voice', voices[0].id)
 rate = engine.getProperty('rate')
 engine.setProperty('rate', rate-30)
 
-
-
-
-def alternative():
-    while True:
-        text=input('Type some Text :  ')
-        tts=gTTS(text=text,lang=lang,slow=False)
-        tts.save('test.mp3')
-
-        time.sleep(0.6)
-        playsound('test.mp3',True)
-
 voices = engine.getProperty('voices')
 
 def listen():
@@ -93,6 +81,15 @@ def run():
         engine.say(output)
         engine.runAndWait()
 
+def alternative():
+    while True:
+        text=listen()
+        prom = doprompt(text, prom)
+        tts=gTTS(text=text,lang=lang,slow=False)
+        tts.save('test.mp3')
+        time.sleep(0.6)
+        playsound('test.mp3',True)
+        os.remove("test.mp3")
 
 alternative()
 
