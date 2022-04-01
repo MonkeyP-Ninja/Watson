@@ -6,6 +6,7 @@ import os
 import openai
 import pyaudio
 import openai
+import speech_recognition as sr
 
 
 openai.organization = "org-rsLil8CYVScO9y4IxDiFJpQW"
@@ -16,9 +17,6 @@ prom="The following is a conversation with an AI assistant. The assistant is hel
 def doprompt(text,prompt):
     prompt = prompt + "\nHuman: " + text + "\nAI"
     return prompt
-
-
-
 
 def wattson(text):
   start_sequence = "\nAI:"
@@ -40,7 +38,6 @@ def wattson(text):
   content = response.choices[0].text
   return content
 
-
 lang= 'fr'
 test=pyttsx3
 
@@ -50,6 +47,9 @@ engine.setProperty('voice', voices[0].id)
 
 rate = engine.getProperty('rate')
 engine.setProperty('rate', rate-30)
+
+
+
 
 def alternative():
     while True:
@@ -62,17 +62,32 @@ def alternative():
 
 voices = engine.getProperty('voices')
 
+def listen():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        audio = r.listen(source)
+    try:
+        text = r.recognize_google(audio)
+        print("You said : {}".format(text))
+        return text
+    except:
+        print("Sorry could not recognize your voice")
 
 
 
 while True:
-    text = input("type : ")
+
+    text = listen()
     prom=doprompt(text,prom)
     if text=="exit":
+        output = wattson(text)[2:]
+        prom = prom + output
+        print(output)
+        engine.say(output)
         engine.stop()
         break
 
-    output = wattson(text)
+    output = wattson(text)[2:]
     prom=prom+output
     print(output)
     engine.say(output)
