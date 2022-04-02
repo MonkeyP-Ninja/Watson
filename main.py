@@ -57,12 +57,12 @@ def listen():
     except:
         print("Sorry could not recognize your voice")
 
-def run():
+def playfromos():
     while True:
 
         text = listen()
-        prom=doprompt(text,prom)
-        if text=="exit":
+        prom = doprompt(text, prom)
+        if text == "exit":
             output = wattson(text)[2:]
             print(output)
             engine.say(output)
@@ -87,17 +87,17 @@ def alternative():
             tts = gTTS(text=output, lang=lang, tld='co.uk', slow=False)
             print(output)
             tts.save('test.mp3')
-            time.sleep(0.6)
+            time.sleep(0.3)
             playsound('test.mp3', True)
             os.remove("test.mp3")
             break
 
-        output = wattson()[2:]
+        output = wattson()[1:]
         tts = gTTS(text=output, lang=lang, slow=False)
         print(output)
         tts.save('test.mp3')
         prom = prom + output
-        time.sleep(0.6)
+        time.sleep(0.3)
         playsound('test.mp3', True)
         os.remove("test.mp3")
 
