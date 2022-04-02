@@ -8,15 +8,24 @@ import pyaudio
 import openai
 import speech_recognition as sr
 
-
 openai.organization = "org-rsLil8CYVScO9y4IxDiFJpQW"
 openai.api_key = "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"
+prom = "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\nHuman: Hello, who are you?\nAI: I am an AI created by OpenAI. How can I help you today? "
 
-prom="The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\nHuman: Hello, who are you?\nAI: I am an AI created by OpenAI. How can I help you today? "
+lang = 'en'
+test = pyttsx3
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[0].id)
+rate = engine.getProperty('rate')
+engine.setProperty('rate', rate - 30)
+voices = engine.getProperty('voices')
 
-def doprompt(text,prompt):
+
+def doprompt(text, prompt):
     prompt = prompt + "\nHuman: " + text + "\nAI"
     return prompt
+
 
 def wattson():
     global prom
@@ -29,26 +38,13 @@ def wattson():
         max_tokens=150,
         prompt=prom,
         top_p=1,
-  frequency_penalty=0,
-  presence_penalty=0.6,
-  stop=[" Human:", " AI:"]
-)
+        frequency_penalty=0,
+        presence_penalty=0.6,
+        stop=[" Human:", " AI:"]
+    )
 
-
-  content = response.choices[0].text
-  return content
-
-lang= 'fr'
-test=pyttsx3
-
-engine = pyttsx3.init()
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[0].id)
-
-rate = engine.getProperty('rate')
-engine.setProperty('rate', rate-30)
-
-voices = engine.getProperty('voices')
+    content = response.choices[0].text
+    return content
 
 def listen():
     r = sr.Recognizer()
@@ -60,7 +56,6 @@ def listen():
         return text
     except:
         print("Sorry could not recognize your voice")
-
 
 def run():
     while True:
@@ -88,8 +83,8 @@ def alternative():
         prom = doprompt(text, prom)
 
         if text == "exit":
-            output = wattson()[2:]
-            tts = gTTS(text=output, lang=lang, slow=False)
+            output = wattson()[1:]
+            tts = gTTS(text=output, lang=lang, tld='co.uk', slow=False)
             print(output)
             tts.save('test.mp3')
             time.sleep(0.6)
@@ -106,5 +101,6 @@ def alternative():
         playsound('test.mp3', True)
         os.remove("test.mp3")
 
-alternative()
 
+if __name__ == "__main__":
+    alternative()
