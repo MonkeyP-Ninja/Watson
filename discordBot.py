@@ -1,4 +1,5 @@
 import discord
+from discord.ext import commands
 import os
 import json
 import requests
@@ -19,6 +20,7 @@ async def on_message(message):
 
     if message.content.startswith('-'):
         text = message.content.replace("- ", "")
+        await message.author.send("lol")
         await message.channel.send(text)
 
 
