@@ -84,7 +84,7 @@ def alternative():
 
         if text == "exit":
             output = wattson()[1:]
-            tts = gTTS(text=output, lang=lang, tld='co.uk', slow=False)
+            tts = gTTS(text=output, lang=lang, tld='co.uk')
             print(output)
             tts.save('test.mp3')
             time.sleep(0.3)
